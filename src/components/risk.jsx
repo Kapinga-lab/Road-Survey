@@ -12,7 +12,7 @@ const RiskPrioritisation = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('/Data_Cracks and Potholes 1.xlsx')
+    fetch('/Data_Cracks and Potholes 2.xlsx')
       .then((res) => res.arrayBuffer())
       .then((buffer) => {
         const wb = XLSX.read(buffer, { type: 'buffer' });
@@ -20,13 +20,13 @@ const RiskPrioritisation = () => {
         const json = XLSX.utils.sheet_to_json(sheet);
 
         const formatted = json
-          .filter(row => row['Lattitude'] && row['Longtitude'])
+          .filter((row) => row['Lattitude'] && row['Longtitude'])
           .map((row, index) => ({
             id: index + 1,
             latitude: row['Lattitude'],
             longitude: row['Longtitude'],
             severity: row['Severity']?.trim().toLowerCase() || 'none',
-            ratingQuarter: (row['Rating'] || '').toString().trim().toUpperCase(), // 'Q1', 'Q2', etc.
+            ratingQuarter: (row['Rating'] || '').toString().trim().toUpperCase(),
           }));
 
         setData(formatted);
@@ -34,10 +34,7 @@ const RiskPrioritisation = () => {
   }, []);
 
   return (
-    <div style={{ height: '80vh', width: '100vw', position: 'relative' }}>
-    <div style={{ padding: '20px' }}>
-      
-
+    <div className="p-6 overflow-x-auto">
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
           <tr style={{ background: '#eee', fontWeight: 'bold' }}>
@@ -54,7 +51,9 @@ const RiskPrioritisation = () => {
           {data.map((row) => (
             <tr key={row.id}>
               <td style={cellStyle}>{row.id}</td>
-              <td style={cellStyle}>{row.latitude}, {row.longitude}</td>
+              <td style={cellStyle}>
+                {row.latitude}, {row.longitude}
+              </td>
               <td style={cellStyle}>{row.severity}</td>
               {['Q1', 'Q2', 'Q3', 'Q4'].map((quarter) => (
                 <td
@@ -66,13 +65,14 @@ const RiskPrioritisation = () => {
                         ? severityColors[row.severity] || ''
                         : '',
                   }}
-                />
+                >
+                  
+                </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
     </div>
   );
 };

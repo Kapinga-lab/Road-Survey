@@ -87,7 +87,7 @@ function Maps() {
   const [legendVisible, setLegendVisible] = useState(true);
 
   useEffect(() => {
-    fetch('/Data_Cracks and Potholes 1.xlsx')
+    fetch('/Data_Cracks and Potholes 2.xlsx')
       .then((res) => res.arrayBuffer())
       .then((data) => {
         const workbook = XLSX.read(data, { type: 'buffer' });
