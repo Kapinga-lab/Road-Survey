@@ -8,7 +8,7 @@ const severityColors = {
   negligible: 'lightgreen',
 };
 
-const RiskPrioritisation = () => {
+const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -34,6 +34,11 @@ const RiskPrioritisation = () => {
       });
   }, []);
 
+  const handleLocationClick = (lat, lng) => {
+    setMapFocus({ lat, lng, zoom: 17}); 
+    setActiveTab('map');
+  };
+
   return (
     <div className="p-6 overflow-x-auto">
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -54,7 +59,10 @@ const RiskPrioritisation = () => {
             <tr key={row.id}>
               <td style={cellStyle}>{row.id}</td>
               <td style={cellStyle}>{row.location}</td>
-              <td style={cellStyle}>
+              <td
+                style={{ ...cellStyle, cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                onClick={() => handleLocationClick(row.latitude, row.longitude)}
+              >
                 {row.latitude}, {row.longitude}
               </td>
               <td style={cellStyle}>{row.severity}</td>
@@ -64,13 +72,9 @@ const RiskPrioritisation = () => {
                   style={{
                     ...cellStyle,
                     backgroundColor:
-                      row.ratingQuarter === quarter
-                        ? severityColors[row.severity] || ''
-                        : '',
+                      row.ratingQuarter === quarter ? severityColors[row.severity] || '' : '',
                   }}
-                >
-                  
-                </td>
+                />
               ))}
             </tr>
           ))}

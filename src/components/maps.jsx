@@ -37,15 +37,27 @@ const getCustomIcon = (type) => {
   });
 };
 
+// FlyTo handler component
+function FlyToLocation({ mapFocus }) {
+  const map = useMap();
+  useEffect(() => {
+    if (mapFocus?.lat && mapFocus?.lng) {
+      map.flyTo([mapFocus.lat, mapFocus.lng], mapFocus.zoom || 16, {
+        duration: 1.5,
+      });
+    }
+  }, [mapFocus, map]);
+  return null;
+}
+
+// Marker with zoom on open
 function AnimatedMarker({ marker }) {
   const map = useMap();
-
   const handlePopupOpen = () => {
     map.flyTo([marker.lat, marker.lng], 16, { duration: 1.2 });
   };
 
   return (
-    
     <Marker
       position={[marker.lat, marker.lng]}
       icon={getCustomIcon(marker.type)}
@@ -56,7 +68,7 @@ function AnimatedMarker({ marker }) {
         {marker.crackType}<br />
         {marker.location}<br />
         <small>
-          <strong>Latitude, Longitude</strong> {marker.lat.toFixed(5)}, {marker.lng.toFixed(5)}<br />
+          <strong>Latitude, Longitude:</strong> {marker.lat.toFixed(5)}, {marker.lng.toFixed(5)}<br />
           Height: {marker.height}, Width: {marker.width}<br />
           Severity: {marker.severity}, Rating: {marker.rating}<br />
           Cost: ${marker.cost}
@@ -79,7 +91,7 @@ function AnimatedMarker({ marker }) {
   );
 }
 
-function Maps() {
+function Maps({ mapFocus }) {
   const [markers, setMarkers] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState(() =>
     Object.keys(iconColors).reduce((acc, type) => ({ ...acc, [type]: true }), {})
@@ -133,7 +145,7 @@ function Maps() {
   return (
     <div style={{ height: '90vh', width: '100vw', position: 'relative' }}>
       <MapContainer
-        center={[36.7783, -119.4179]} 
+        center={[36.7783, -119.4179]}
         zoom={6}
         maxZoom={22}
         scrollWheelZoom={true}
@@ -143,7 +155,7 @@ function Maps() {
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
+        <FlyToLocation mapFocus={mapFocus} />
         {markers
           .filter((marker) => selectedTypes[marker.type])
           .map((marker, idx) => (
@@ -151,7 +163,7 @@ function Maps() {
           ))}
       </MapContainer>
 
-      {/* Legend/Filter Panel */}
+      {/* 🔵 Legend box */}
       <div style={{
         position: 'absolute',
         bottom: 10,
@@ -164,14 +176,13 @@ function Maps() {
         fontSize: '14px',
         overflow: 'hidden',
       }}>
-        {/* Header with toggle */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '10px 12px',
           backgroundColor: '#f5f5f5',
-          color:'black',
+          color: 'black',
           borderBottom: '1px solid #ddd',
           cursor: 'pointer',
         }} onClick={() => setLegendVisible(!legendVisible)}>
@@ -193,10 +204,9 @@ function Maps() {
           }}>
             <label style={{
               display: 'flex',
-              color:'black',
+              color: 'black',
               alignItems: 'center',
               marginBottom: 10,
-              
               cursor: 'pointer',
             }}>
               <input
@@ -213,7 +223,7 @@ function Maps() {
                 key={type}
                 style={{
                   display: 'flex',
-                  color:'black',
+                  color: 'black',
                   alignItems: 'center',
                   marginBottom: 6,
                   cursor: 'pointer'

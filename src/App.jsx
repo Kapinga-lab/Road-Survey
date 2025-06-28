@@ -6,26 +6,17 @@ import Heatmap from './components/heatmap';
 
 function App() {
   const [activeTab, setActiveTab] = useState('map');
+  const [mapFocus, setMapFocus] = useState(null); // Focus location from Risk tab
 
   return (
     <div className="min-h-screen bg-gray-100 min-w-screen">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="">
-        {activeTab === 'map' && (
-          <div className="">
-            <Maps />
-          </div>
-        )}
+      <main>
+        {activeTab === 'map' && <Maps mapFocus={mapFocus} />}
         {activeTab === 'risk' && (
-          <div >
-            <RiskPrioritisation />
-          </div>
+          <RiskPrioritisation setActiveTab={setActiveTab} setMapFocus={setMapFocus} />
         )}
-        {activeTab === 'heatmap' && (
-          <div className="">
-            <Heatmap/>
-          </div>
-        )}
+        {activeTab === 'heatmap' && <Heatmap />}
       </main>
     </div>
   );

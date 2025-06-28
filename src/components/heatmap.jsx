@@ -59,8 +59,8 @@ export default function Heatmap() {
   return (
     <div style={{ height: "90vh", width: "100vw" }}>
       <MapContainer
-        center={[36.7783, -119.4179]} // Center of India
-        zoom={5}
+        center={[36.7783, -119.4179]} 
+        zoom={6}
         scrollWheelZoom
         style={{ height: "100%", width: "100%" }}
       >
