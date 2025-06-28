@@ -23,6 +23,7 @@ const RiskPrioritisation = () => {
           .filter((row) => row['Lattitude'] && row['Longtitude'])
           .map((row, index) => ({
             id: index + 1,
+            location: row['Location address']?.trim() || 'Unknown',
             latitude: row['Lattitude'],
             longitude: row['Longtitude'],
             severity: row['Severity']?.trim().toLowerCase() || 'none',
@@ -39,6 +40,7 @@ const RiskPrioritisation = () => {
         <thead>
           <tr style={{ background: '#eee', fontWeight: 'bold' }}>
             <td style={cellStyle}>S.No</td>
+            <td style={cellStyle}>Location</td>
             <td style={cellStyle}>Latitude Longitude</td>
             <td style={cellStyle}>Severity</td>
             <td style={cellStyle}>Q1</td>
@@ -51,6 +53,7 @@ const RiskPrioritisation = () => {
           {data.map((row) => (
             <tr key={row.id}>
               <td style={cellStyle}>{row.id}</td>
+              <td style={cellStyle}>{row.location}</td>
               <td style={cellStyle}>
                 {row.latitude}, {row.longitude}
               </td>
