@@ -45,6 +45,7 @@ function AnimatedMarker({ marker }) {
   };
 
   return (
+    
     <Marker
       position={[marker.lat, marker.lng]}
       icon={getCustomIcon(marker.type)}
@@ -58,7 +59,7 @@ function AnimatedMarker({ marker }) {
           <strong>Latitude, Longitude</strong> {marker.lat.toFixed(5)}, {marker.lng.toFixed(5)}<br />
           Height: {marker.height}, Width: {marker.width}<br />
           Severity: {marker.severity}, Rating: {marker.rating}<br />
-          Cost: ₹{marker.cost}
+          Cost: ${marker.cost}
         </small><br />
         {marker.image && (
           <img
@@ -130,9 +131,9 @@ function Maps() {
   };
 
   return (
-    <div style={{ height: '100vh', width: '100vw', position: 'relative' }}>
+    <div style={{ height: '90vh', width: '100vw', position: 'relative' }}>
       <MapContainer
-        center={[36.7783, -119.4179]} // California
+        center={[36.7783, -119.4179]} 
         zoom={6}
         maxZoom={22}
         scrollWheelZoom={true}
