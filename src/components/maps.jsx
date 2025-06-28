@@ -62,7 +62,7 @@ function AnimatedMarker({ marker }) {
         </small><br />
         {marker.image && (
           <img
-            src={marker.image.startsWith('http') ? marker.image : `/images/${marker.image}`}
+            src={marker.image.startsWith('http') ? marker.image : `/potholes/${marker.image}`}
             alt="Issue"
             style={{
               width: '100%',
@@ -86,7 +86,7 @@ function Maps() {
   const [legendVisible, setLegendVisible] = useState(true);
 
   useEffect(() => {
-    fetch('/Data_Cracks and Potholes (1).xlsx')
+    fetch('/Data_Cracks and Potholes 1.xlsx')
       .then((res) => res.arrayBuffer())
       .then((data) => {
         const workbook = XLSX.read(data, { type: 'buffer' });
