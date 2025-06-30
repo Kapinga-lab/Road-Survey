@@ -4,10 +4,10 @@ import * as XLSX from "xlsx";
 import "leaflet/dist/leaflet.css";
 
 const ratingColors = {
-  q1: "red",
-  q2: "orange",
-  q3: "yellow",
-  q4: "lightgreen",
+  p1: "red",
+  p2: "orange",
+  p3: "yellow",
+  p4: "lightgreen",
 };
 
 export default function Heatmap() {

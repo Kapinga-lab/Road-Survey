@@ -8,12 +8,11 @@ const severityColors = {
   negligible: "lightgreen",
 };
 
-// New: Rating color map
 const ratingColors = {
-  Q1: "red",
-  Q2: "orange",
-  Q3: "yellow",
-  Q4: "lightgreen",
+  P1: "red",
+  P2: "orange",
+  P3: "yellow",
+  P4: "lightgreen",
 };
 
 const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
@@ -38,9 +37,12 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
               ? row["Severity"].trim().charAt(0).toUpperCase() +
                 row["Severity"].trim().slice(1).toLowerCase()
               : "None",
-
             Rating: (row["Rating"] || "").toString().trim().toUpperCase(),
-          }));
+          }))
+          .sort((a, b) => {
+            const order = { P1: 1, P2: 2, P3: 3, P4: 4 };
+            return (order[a.Rating] || 5) - (order[b.Rating] || 5);
+          });
 
         setData(formatted);
       });
