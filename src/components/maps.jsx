@@ -1,15 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as XLSX from 'xlsx';
 import L from 'leaflet';
-
-// delete L.Icon.Default.prototype._getIconUrl;
-// L.Icon.Default.mergeOptions({
-//   iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
-//   iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
-//   shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href,
-// });
 
 const iconColors = {
   Pothole: 'red',
@@ -18,7 +11,6 @@ const iconColors = {
   'Zebra crossing paint damage': 'purple',
   Bin: 'green',
   'Horizontal Crack': 'yellow',
-  'Vertical Crack': 'brown',
 };
 
 const getCustomIcon = (type) => {
@@ -37,33 +29,50 @@ const getCustomIcon = (type) => {
   });
 };
 
-// FlyTo handler component
-function FlyToLocation({ mapFocus }) {
+function FlyToLocation({ mapFocus, onFlyComplete }) {
   const map = useMap();
+
   useEffect(() => {
     if (mapFocus?.lat && mapFocus?.lng) {
-      map.flyTo([mapFocus.lat, mapFocus.lng], mapFocus.zoom || 16, {
+      map.flyTo([mapFocus.lat, mapFocus.lng], mapFocus.zoom || 18, {
+        animate: true,
         duration: 1.5,
       });
+      const timeout = setTimeout(() => {
+        if (onFlyComplete) onFlyComplete(mapFocus.lat, mapFocus.lng);
+      }, 1600);
+      return () => clearTimeout(timeout);
     }
-  }, [mapFocus, map]);
+  }, [mapFocus]);
+
   return null;
 }
 
-
-function AnimatedMarker({ marker }) {
+function AnimatedMarker({ marker, markerRefs }) {
   const map = useMap();
-  const handlePopupOpen = () => {
-    map.flyTo([marker.lat, marker.lng], 16, { duration: 1.2 });
+  const markerRef = useRef();
+
+  useEffect(() => {
+    if (markerRef.current) {
+      markerRefs.current[`${marker.lat}_${marker.lng}`] = markerRef.current;
+    }
+  }, [marker, markerRefs]);
+
+  const handleClick = () => {
+    map.flyTo([marker.lat, marker.lng], 18, {
+      animate: true,
+      duration: 1.2,
+    });
   };
 
   return (
     <Marker
+      ref={markerRef}
       position={[marker.lat, marker.lng]}
       icon={getCustomIcon(marker.type)}
-      eventHandlers={{ popupopen: handlePopupOpen }}
+      eventHandlers={{ click: handleClick }}
     >
-      <Popup>
+      <Popup autoPan={true}>
         <strong>{marker.type}</strong><br />
         {marker.crackType}<br />
         {marker.location}<br />
@@ -97,6 +106,7 @@ function Maps({ mapFocus }) {
     Object.keys(iconColors).reduce((acc, type) => ({ ...acc, [type]: true }), {})
   );
   const [legendVisible, setLegendVisible] = useState(true);
+  const markerRefs = useRef({});
 
   useEffect(() => {
     fetch('/Data_Cracks and Potholes 2.xlsx')
@@ -142,6 +152,11 @@ function Maps({ mapFocus }) {
     setSelectedTypes(newState);
   };
 
+  const openPopup = (lat, lng) => {
+    const ref = markerRefs.current[`${lat}_${lng}`];
+    if (ref) ref.openPopup();
+  };
+
   return (
     <div style={{ height: '90vh', width: '100vw', position: 'relative' }}>
       <MapContainer
@@ -155,19 +170,18 @@ function Maps({ mapFocus }) {
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <FlyToLocation mapFocus={mapFocus} />
+        <FlyToLocation mapFocus={mapFocus} onFlyComplete={openPopup} />
         {markers
           .filter((marker) => selectedTypes[marker.type])
           .map((marker, idx) => (
-            <AnimatedMarker key={idx} marker={marker} />
+            <AnimatedMarker key={idx} marker={marker} markerRefs={markerRefs} />
           ))}
       </MapContainer>
 
-      
       <div style={{
         position: 'absolute',
         bottom: 10,
-        right: 10,
+        left: 10,
         background: 'white',
         borderRadius: '8px',
         boxShadow: '0 2px 6px rgba(0,0,0,0.3)',

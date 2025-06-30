@@ -1,41 +1,45 @@
-import { useEffect, useState } from 'react';
-import * as XLSX from 'xlsx';
+import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
 
 const severityColors = {
-  high: 'red',
-  medium: 'orange',
-  low: 'yellow',
-  negligible: 'lightgreen',
+  high: "red",
+  medium: "orange",
+  low: "yellow",
+  negligible: "lightgreen",
 };
 
 // New: Rating color map
 const ratingColors = {
-  Q1: 'red',
-  Q2: 'orange',
-  Q3: 'yellow',
-  Q4: 'lightgreen',
+  Q1: "red",
+  Q2: "orange",
+  Q3: "yellow",
+  Q4: "lightgreen",
 };
 
 const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('/Data_Cracks and Potholes 2.xlsx')
+    fetch("/Data_Cracks and Potholes 2.xlsx")
       .then((res) => res.arrayBuffer())
       .then((buffer) => {
-        const wb = XLSX.read(buffer, { type: 'buffer' });
+        const wb = XLSX.read(buffer, { type: "buffer" });
         const sheet = wb.Sheets[wb.SheetNames[0]];
         const json = XLSX.utils.sheet_to_json(sheet);
 
         const formatted = json
-          .filter((row) => row['Lattitude'] && row['Longtitude'])
+          .filter((row) => row["Lattitude"] && row["Longtitude"])
           .map((row, index) => ({
             id: index + 1,
-            location: row['Location address']?.trim() || 'Unknown',
-            latitude: row['Lattitude'],
-            longitude: row['Longtitude'],
-            severity: row['Severity']?.trim().toLowerCase() || 'none',
-            Rating: (row['Rating'] || '').toString().trim().toUpperCase(),
+            location: row["Location address"]?.trim() || "Unknown",
+            latitude: row["Lattitude"],
+            longitude: row["Longtitude"],
+            severity: row["Severity"]
+              ? row["Severity"].trim().charAt(0).toUpperCase() +
+                row["Severity"].trim().slice(1).toLowerCase()
+              : "None",
+
+            Rating: (row["Rating"] || "").toString().trim().toUpperCase(),
           }));
 
         setData(formatted);
@@ -44,14 +48,20 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
 
   const handleLocationClick = (lat, lng) => {
     setMapFocus({ lat, lng, zoom: 17 });
-    setActiveTab('map');
+    setActiveTab("map");
   };
 
   return (
     <div className="p-6 overflow-x-auto">
-      <table style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse' }}>
+      <table
+        style={{
+          width: "100%",
+          tableLayout: "fixed",
+          borderCollapse: "collapse",
+        }}
+      >
         <thead>
-          <tr style={{ background: '#eee', fontWeight: 'bold' }}>
+          <tr style={{ background: "#eee", fontWeight: "bold" }}>
             <td style={cellStyle}>S.No</td>
             <td style={cellStyle}>Location</td>
             <td style={cellStyle}>Latitude Longitude</td>
@@ -67,9 +77,9 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
               <td
                 style={{
                   ...cellStyle,
-                  cursor: 'pointer',
-                  color: '#007bff',
-                  textDecoration: 'underline',
+                  cursor: "pointer",
+                  color: "#007bff",
+                  textDecoration: "underline",
                 }}
                 onClick={() => handleLocationClick(row.latitude, row.longitude)}
               >
@@ -78,8 +88,8 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
               <td
                 style={{
                   ...cellStyle,
-                  backgroundColor: ratingColors[row.Rating] || '',
-                  color: 'black',
+                  backgroundColor: ratingColors[row.Rating] || "",
+                  color: "black",
                 }}
               >
                 {row.Rating}
@@ -94,11 +104,11 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
 };
 
 const cellStyle = {
-  border: '1px solid #ccc',
-  padding: '8px',
-  textAlign: 'center',
-  wordWrap: 'break-word',
-  fontSize: '12px',
+  border: "1px solid #ccc",
+  padding: "8px",
+  textAlign: "center",
+  wordWrap: "break-word",
+  fontSize: "12px",
 };
 
 export default RiskPrioritisation;
