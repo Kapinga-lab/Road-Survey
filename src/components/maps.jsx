@@ -4,12 +4,12 @@ import 'leaflet/dist/leaflet.css';
 import * as XLSX from 'xlsx';
 import L from 'leaflet';
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
-  iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
-  shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href,
-});
+// delete L.Icon.Default.prototype._getIconUrl;
+// L.Icon.Default.mergeOptions({
+//   iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
+//   iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
+//   shadowUrl: new URL('leaflet/dist/images/marker-shadow.png', import.meta.url).href,
+// });
 
 const iconColors = {
   Pothole: 'red',
@@ -50,7 +50,7 @@ function FlyToLocation({ mapFocus }) {
   return null;
 }
 
-// Marker with zoom on open
+
 function AnimatedMarker({ marker }) {
   const map = useMap();
   const handlePopupOpen = () => {

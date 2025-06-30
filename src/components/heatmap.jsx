@@ -29,12 +29,13 @@ export default function Heatmap() {
           const lng = parseFloat(row.Longtitude);
           const rating = (row.Rating || "").toString().trim().toLowerCase();
           const cost = parseFloat(row["Cost of repairing"]) || 0;
+          const location = row["Location address"]?.trim() || "Unknown";
 
           if (!lat || !lng || !cluster) return;
 
           if (!clusterGroups[cluster]) clusterGroups[cluster] = [];
 
-          clusterGroups[cluster].push({ lat, lng, rating, cost });
+          clusterGroups[cluster].push({ lat, lng, rating, cost, location });
         });
 
         const clusters = Object.entries(clusterGroups).map(([clusterId, group]) => {
@@ -42,6 +43,7 @@ export default function Heatmap() {
           const avgLng = group.reduce((sum, p) => sum + p.lng, 0) / group.length;
           const avgCost = group.reduce((sum, p) => sum + p.cost, 0) / group.length;
           const mainRating = group[0].rating;
+          const mainLocation = group[0].location;
 
           return {
             id: clusterId,
@@ -49,6 +51,7 @@ export default function Heatmap() {
             lng: avgLng,
             avgCost: avgCost.toFixed(2),
             rating: mainRating,
+            location: mainLocation,
           };
         });
 
@@ -59,7 +62,7 @@ export default function Heatmap() {
   return (
     <div style={{ height: "90vh", width: "100vw" }}>
       <MapContainer
-        center={[36.7783, -119.4179]} 
+        center={[36.7783, -119.4179]}
         zoom={6}
         scrollWheelZoom
         style={{ height: "100%", width: "100%" }}
@@ -81,8 +84,8 @@ export default function Heatmap() {
             weight={2}
           >
             <Popup>
-              {/* <strong>Cluster:</strong> {cluster.id}<br /> */}
               <strong>Rating:</strong> {cluster.rating.toUpperCase()}<br />
+              <strong>Location:</strong> {cluster.location}<br/>
               <strong>Avg Repair Cost:</strong> ${cluster.avgCost}
             </Popup>
           </CircleMarker>

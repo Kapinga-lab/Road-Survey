@@ -6,7 +6,7 @@ import Heatmap from './components/heatmap';
 
 function App() {
   const [activeTab, setActiveTab] = useState('map');
-  const [mapFocus, setMapFocus] = useState(null); // Focus location from Risk tab
+  const [mapFocus, setMapFocus] = useState(null); // For Focus location from Risk tab
 
   return (
     <div className="min-h-screen bg-gray-100 min-w-screen">
