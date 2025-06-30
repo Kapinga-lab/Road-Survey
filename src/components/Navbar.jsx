@@ -29,7 +29,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
           >
             Heat Map
           </button>
-          {activeTab !== "heatmap" && (
+          {/* {activeTab !== "heatmap" && (
             <button
               onClick={() => setActiveTab("heatmap")}
               className="px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -41,7 +41,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                 className="w-5 h-5"
               />
             </button>
-          )}
+          )} */}
 
           {/* <button
             onClick={() => setActiveTab('risk')}
