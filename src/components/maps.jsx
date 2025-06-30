@@ -6,11 +6,12 @@ import L from 'leaflet';
 
 const iconColors = {
   Pothole: 'red',
-  'Aligator Crack': 'orange',
-  Trashcan: 'blue',
-  'Zebra crossing paint damage': 'purple',
-  Bin: 'green',
-  'Horizontal Crack': 'yellow',
+'Alligator Crack': 'orange',
+Trashcan: 'blue',
+'Damage Paint': 'purple',
+Manhole: 'green',
+'Horizontal Crack': 'yellow',
+
 };
 
 const getCustomIcon = (type) => {
@@ -109,7 +110,7 @@ function Maps({ mapFocus }) {
   const markerRefs = useRef({});
 
   useEffect(() => {
-    fetch('/Data_Cracks and Potholes 2.xlsx')
+    fetch('/Data_Cracks and Pothole.xlsx')
       .then((res) => res.arrayBuffer())
       .then((data) => {
         const workbook = XLSX.read(data, { type: 'buffer' });

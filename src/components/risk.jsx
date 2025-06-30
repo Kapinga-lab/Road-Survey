@@ -20,7 +20,7 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("/Data_Cracks and Potholes 2.xlsx")
+    fetch("/Data_Cracks and Pothole.xlsx")
       .then((res) => res.arrayBuffer())
       .then((buffer) => {
         const wb = XLSX.read(buffer, { type: "buffer" });
