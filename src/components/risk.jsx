@@ -8,6 +8,14 @@ const severityColors = {
   negligible: 'lightgreen',
 };
 
+// New: Rating color map
+const ratingColors = {
+  Q1: 'red',
+  Q2: 'orange',
+  Q3: 'yellow',
+  Q4: 'lightgreen',
+};
+
 const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
   const [data, setData] = useState([]);
 
@@ -27,7 +35,7 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
             latitude: row['Lattitude'],
             longitude: row['Longtitude'],
             severity: row['Severity']?.trim().toLowerCase() || 'none',
-            ratingQuarter: (row['Rating'] || '').toString().trim().toUpperCase(),
+            Rating: (row['Rating'] || '').toString().trim().toUpperCase(),
           }));
 
         setData(formatted);
@@ -35,23 +43,20 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
   }, []);
 
   const handleLocationClick = (lat, lng) => {
-    setMapFocus({ lat, lng, zoom: 17}); 
+    setMapFocus({ lat, lng, zoom: 17 });
     setActiveTab('map');
   };
 
   return (
     <div className="p-6 overflow-x-auto">
-      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+      <table style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse' }}>
         <thead>
           <tr style={{ background: '#eee', fontWeight: 'bold' }}>
             <td style={cellStyle}>S.No</td>
             <td style={cellStyle}>Location</td>
             <td style={cellStyle}>Latitude Longitude</td>
+            <td style={cellStyle}>Rating</td>
             <td style={cellStyle}>Severity</td>
-            <td style={cellStyle}>Q1</td>
-            <td style={cellStyle}>Q2</td>
-            <td style={cellStyle}>Q3</td>
-            <td style={cellStyle}>Q4</td>
           </tr>
         </thead>
         <tbody>
@@ -60,22 +65,26 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
               <td style={cellStyle}>{row.id}</td>
               <td style={cellStyle}>{row.location}</td>
               <td
-                style={{ ...cellStyle, cursor: 'pointer', color: '#007bff', textDecoration: 'underline' }}
+                style={{
+                  ...cellStyle,
+                  cursor: 'pointer',
+                  color: '#007bff',
+                  textDecoration: 'underline',
+                }}
                 onClick={() => handleLocationClick(row.latitude, row.longitude)}
               >
                 {row.latitude}, {row.longitude}
               </td>
+              <td
+                style={{
+                  ...cellStyle,
+                  backgroundColor: ratingColors[row.Rating] || '',
+                  color: 'black',
+                }}
+              >
+                {row.Rating}
+              </td>
               <td style={cellStyle}>{row.severity}</td>
-              {['Q1', 'Q2', 'Q3', 'Q4'].map((quarter) => (
-                <td
-                  key={quarter}
-                  style={{
-                    ...cellStyle,
-                    backgroundColor:
-                      row.ratingQuarter === quarter ? severityColors[row.severity] || '' : '',
-                  }}
-                />
-              ))}
             </tr>
           ))}
         </tbody>
@@ -88,6 +97,8 @@ const cellStyle = {
   border: '1px solid #ccc',
   padding: '8px',
   textAlign: 'center',
+  wordWrap: 'break-word',
+  fontSize: '12px',
 };
 
 export default RiskPrioritisation;

@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Maps from './components/maps';
-import RiskPrioritisation from './components/risk';
-import Heatmap from './components/heatmap';
+import MapWithRiskPanel from './components/MapWithRiskPanel';
 
 function App() {
   const [activeTab, setActiveTab] = useState('map');
-  const [mapFocus, setMapFocus] = useState(null); // For Focus location from Risk tab
+  const [mapFocus, setMapFocus] = useState(null); // <-- add this
 
   return (
     <div className="min-h-screen bg-gray-100 min-w-screen">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <main>
         {activeTab === 'map' && <Maps mapFocus={mapFocus} />}
-        {activeTab === 'risk' && (
-          <RiskPrioritisation setActiveTab={setActiveTab} setMapFocus={setMapFocus} />
+        {activeTab === 'heatmap' && (
+          <MapWithRiskPanel
+            setActiveTab={setActiveTab}
+            mapFocus={mapFocus}
+            setMapFocus={setMapFocus}
+          />
         )}
-        {activeTab === 'heatmap' && <Heatmap />}
       </main>
     </div>
   );

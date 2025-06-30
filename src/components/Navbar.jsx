@@ -30,7 +30,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
           >
             Heat Map
           </button>
-          <button
+          {/* <button
             onClick={() => setActiveTab('risk')}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'risk'
@@ -39,7 +39,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
             }`}
           >
             Risk Prioritisation
-          </button>
+          </button> */}
         </div>
       </div>
     </nav>

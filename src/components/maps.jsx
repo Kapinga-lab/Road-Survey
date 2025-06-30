@@ -163,7 +163,7 @@ function Maps({ mapFocus }) {
           ))}
       </MapContainer>
 
-      {/* 🔵 Legend box */}
+      
       <div style={{
         position: 'absolute',
         bottom: 10,
