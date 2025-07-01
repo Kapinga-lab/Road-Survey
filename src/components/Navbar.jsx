@@ -6,7 +6,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
     <nav className="bg-white border-b border-gray-300  w-full">
       <div className="flex justify-between items-center px-2 py-2">
         <h2 className="text-xl font-bold text-gray-900">
-          Cracks & Pothole Analysis
+          US Road Damage and Repair Analysis
         </h2>
         <div className="flex space-x-2 px-4">
           <button

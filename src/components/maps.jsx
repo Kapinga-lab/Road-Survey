@@ -60,7 +60,7 @@ function AnimatedMarker({ marker, markerRefs }) {
   }, [marker, markerRefs]);
 
   const handleClick = () => {
-    map.flyTo([marker.lat, marker.lng], 18, {
+    map.flyTo([marker.lat, marker.lng], 16, {
       animate: true,
       duration: 1.2,
     });
@@ -79,7 +79,7 @@ function AnimatedMarker({ marker, markerRefs }) {
         {marker.location}<br />
         <small>
           <strong>Latitude, Longitude:</strong> {marker.lat.toFixed(5)}, {marker.lng.toFixed(5)}<br />
-          Height: {marker.height}, Width: {marker.width}<br />
+          Height: {marker.height} (in), Width: {marker.width} (in)<br />
           Severity: {marker.severity}, Rating: {marker.rating}<br />
           Cost: ${marker.cost}
         </small><br />
@@ -125,7 +125,7 @@ function Maps({ mapFocus }) {
             location: row['Location address'],
             crackType: row['Crack/Pothole'],
             type: row['Type'],
-            height: row['Height'],
+            height: row['Depth'],
             width: row['Width'],
             severity: row['Severity'],
             rating: row['Rating'],
