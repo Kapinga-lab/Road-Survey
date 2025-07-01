@@ -6,12 +6,12 @@ import L from 'leaflet';
 
 const iconColors = {
   Pothole: 'red',
-'Alligator Crack': 'orange',
-Trashcan: 'blue',
-'Damage Paint': 'purple',
-Manhole: 'green',
-'Horizontal Crack': 'yellow',
-
+  'Alligator Crack': 'orange',
+  Trashcan: 'blue',
+  'Damage Paint': 'purple',
+  Manhole: 'green',
+  'Horizontal Crack': 'yellow',
+  'Vertical Crack': 'pink',
 };
 
 const getCustomIcon = (type) => {
@@ -85,7 +85,7 @@ function AnimatedMarker({ marker, markerRefs }) {
         </small><br />
         {marker.image && (
           <img
-            src={marker.image.startsWith('http') ? marker.image : `/potholes/${marker.image}`}
+            src={marker.image.startsWith('http') ? marker.image : `/final/${marker.image}`}
             alt="Issue"
             style={{
               width: '100%',
@@ -101,6 +101,53 @@ function AnimatedMarker({ marker, markerRefs }) {
   );
 }
 
+function ResetZoomButton({ defaultCenter = [36.7783, -119.4179], defaultZoom = 6 }) {
+  const map = useMap();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const updateVisibility = () => {
+      setShow(map.getZoom() > defaultZoom);
+    };
+
+    map.on('zoomend', updateVisibility);
+    updateVisibility();
+
+    return () => {
+      map.off('zoomend', updateVisibility);
+    };
+  }, [map, defaultZoom]);
+
+  const handleReset = () => {
+    map.setView(defaultCenter, defaultZoom);
+  };
+
+  if (!show) return null;
+
+  return (
+    <img
+      src="/refres.png"
+      alt="Reset Zoom"
+      onClick={handleReset}
+      style={{
+        position: 'absolute',
+        bottom: '20px',
+        right: '20px',
+        zIndex: 1002,
+        width: '40px',
+        height: '40px',
+        cursor: 'pointer',
+        backgroundColor: 'white',
+        borderRadius: '50%',
+        padding: '6px',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+        border: '1px solid #ccc',
+      }}
+    />
+  );
+}
+
+
 function Maps({ mapFocus }) {
   const [markers, setMarkers] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState(() =>
@@ -110,7 +157,7 @@ function Maps({ mapFocus }) {
   const markerRefs = useRef({});
 
   useEffect(() => {
-    fetch('/Data_Cracks and Pothole.xlsx')
+    fetch('/Data_Cracks and Pothole_1.xlsx')
       .then((res) => res.arrayBuffer())
       .then((data) => {
         const workbook = XLSX.read(data, { type: 'buffer' });
@@ -177,6 +224,7 @@ function Maps({ mapFocus }) {
           .map((marker, idx) => (
             <AnimatedMarker key={idx} marker={marker} markerRefs={markerRefs} />
           ))}
+        <ResetZoomButton />
       </MapContainer>
 
       <div style={{
