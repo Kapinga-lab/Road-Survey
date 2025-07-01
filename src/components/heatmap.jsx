@@ -14,7 +14,7 @@ export default function Heatmap() {
   const [clusterData, setClusterData] = useState([]);
 
   useEffect(() => {
-    fetch("/Data_Cracks and Pothole.xlsx")
+    fetch("/Data_Cracks and Pothole_1.xlsx")
       .then((res) => res.arrayBuffer())
       .then((data) => {
         const workbook = XLSX.read(data, { type: "buffer" });
