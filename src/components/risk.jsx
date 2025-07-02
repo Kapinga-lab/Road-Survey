@@ -113,7 +113,7 @@ const cellStyle = {
   padding: "8px",
   textAlign: "center",
   wordWrap: "break-word",
-  fontSize: "12px",
+  fontSize: "10px",
 };
 
 export default RiskPrioritisation;
