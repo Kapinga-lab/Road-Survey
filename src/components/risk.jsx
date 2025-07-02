@@ -33,6 +33,7 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
             location: row["Location address"]?.trim() || "Unknown",
             latitude: row["Lattitude"],
             longitude: row["Longtitude"],
+            cost: parseFloat(row["Cost of repairing"]) || 0,
             severity: row["Severity"]
               ? row["Severity"].trim().charAt(0).toUpperCase() +
                 row["Severity"].trim().slice(1).toLowerCase()
@@ -69,6 +70,7 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
             <td style={cellStyle}>Latitude Longitude</td>
             <td style={cellStyle}>Rating</td>
             <td style={cellStyle}>Severity</td>
+            <td style={cellStyle}>Cost</td>
           </tr>
         </thead>
         <tbody>
@@ -97,6 +99,7 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
                 {row.Rating}
               </td>
               <td style={cellStyle}>{row.severity}</td>
+              <td style={cellStyle}>{row.cost}</td>
             </tr>
           ))}
         </tbody>
