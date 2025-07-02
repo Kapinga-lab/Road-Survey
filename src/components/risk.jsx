@@ -70,7 +70,7 @@ const RiskPrioritisation = ({ setActiveTab, setMapFocus }) => {
             <td style={cellStyle}>Latitude Longitude</td>
             <td style={cellStyle}>Rating</td>
             <td style={cellStyle}>Severity</td>
-            <td style={cellStyle}>Cost</td>
+            <td style={cellStyle}>Cost ($)</td>
           </tr>
         </thead>
         <tbody>
