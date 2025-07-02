@@ -60,7 +60,38 @@ export default function Heatmap() {
   }, []);
 
   return (
-    <div style={{ height: "90vh", width: "100vw" }}>
+    <div style={{ position: 'relative', height: "90vh", width: "100vw" }}>
+      {/* Fixed-position Power BI Button */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          zIndex: 1000,
+        }}
+      >
+        <button
+          onClick={() =>
+            window.open(
+              "https://app.powerbi.com/groups/me/reports/d0ae55d5-522c-4ff1-a7a1-f66958ea36f5/d54b53605101dd04a90b?experience=power-bi",
+              "_blank"
+            )
+          }
+          style={{
+            padding: '10px 16px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            fontWeight: 'bold',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+          }}
+        >
+          View Power BI Report
+        </button>
+      </div>
+
       <MapContainer
         center={[36.7783, -119.4179]}
         zoom={6}
@@ -85,7 +116,7 @@ export default function Heatmap() {
           >
             <Popup>
               <strong>Rating:</strong> {cluster.rating.toUpperCase()}<br />
-              <strong>Location:</strong> {cluster.location}<br/>
+              <strong>Location:</strong> {cluster.location}<br />
               <strong>Avg Repair Cost:</strong> ${cluster.avgCost}
             </Popup>
           </CircleMarker>

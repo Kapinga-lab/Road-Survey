@@ -43,6 +43,8 @@ export default function MapWithRiskPanel({ setMapFocus, mapFocus, setActiveTab }
             {tableVisible ? '−' : '+'}
           </span>
         </div>
+          
+
 
         {tableVisible && (
           <div style={{ maxHeight: '340px', overflowY: 'auto' }}>
